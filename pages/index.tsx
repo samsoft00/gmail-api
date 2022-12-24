@@ -30,6 +30,7 @@ export default function Home() {
 
     searchFlights(auth).then(flights => {
       setFlights(flights);
+      setIsFetching(false)
     });    
 
   }, [authMethod])
