@@ -1,7 +1,8 @@
 import { Button } from 'react-bootstrap'
 import { google, Auth } from 'googleapis'
 import { useEffect, useState } from 'react'
-import { Flight, searchFlights } from './api/hello';
+import { Flight, searchFlights } from './api/flight';
+import { FlightList } from './_app';
 
 export default function Home() {
   const [authMethod, setAuthMethod] = useState<'gmail' | 'gsuite' | null>(null)
@@ -42,16 +43,24 @@ export default function Home() {
   const handleGSuiteAuthClick = () => { setAuthMethod('gsuite') };
 
   return (
-    <div>
-      {authMethod === null && (
-        <>
-          <h1>Choose an Authentication Method</h1>
-          <Button onClick={handleGmailAuthClick}>Gmail</Button>
-          <Button onClick={handleGSuiteAuthClick}>G Suite</Button>
-        </>
+    <>
+      <div>
+        {authMethod === null && (
+          <>
+            <h1>Choose an Authentication Method</h1>
+            <Button onClick={handleGmailAuthClick}>Gmail</Button>
+            <Button onClick={handleGSuiteAuthClick}>G Suite</Button>
+          </>
+        )}
+        {authMethod === 'gmail' && <p>Authenticating with Gmail...</p>}
+        {authMethod === 'gsuite' && <p>Authenticating with G Suite...</p>}
+      </div>
+
+      {isFetching ? (
+        <p>Loading...</p>
+      ) : (
+        <FlightList flights={flights} />
       )}
-      {authMethod === 'gmail' && <p>Authenticating with Gmail...</p>}
-      {authMethod === 'gsuite' && <p>Authenticating with G Suite...</p>}
-    </div>
+    </>
   )
 }
